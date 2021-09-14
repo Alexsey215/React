@@ -1,7 +1,14 @@
 import {Link} from "react-router-dom";
-import {Container, Row, Col} from "react-bootstrap";
+import {Container, Row, Col, Form} from "react-bootstrap";
+import {store} from "../../store";
+import {toggleCheckbox} from "../../store/profile/actions";
 
 export const Profile = () => {
+    const state = store.getState();
+    console.log(state)
+    const handleClick = () => {
+        store.dispatch(toggleCheckbox)
+    }
     return (
         <Container className="mt-2" fluid="md">
             <Row className="mb-2">
@@ -17,6 +24,8 @@ export const Profile = () => {
                 </Col>
             </Row>
             <h2>This is profile page</h2>
+            <Form.Check onChange={handleClick}
+            />
         </Container>
 
     )
