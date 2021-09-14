@@ -1,5 +1,5 @@
 import './Message.scss';
-import {Col, Row} from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 export function Message({messageAuthor, messageText, renderCurDate}) {
     return (
         <Row className='text-primary mt-4'>
