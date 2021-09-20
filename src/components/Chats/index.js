@@ -1,93 +1,84 @@
 import { Container, Row, Col  } from 'react-bootstrap';
-import {useCallback, useEffect, useState} from "react";
-import {Link, useParams } from "react-router-dom"
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useParams,useHistory } from "react-router-dom"
+
+import { addMessage } from "../../store/messages/actions";
 import { Message } from '../Message'
 import { ChatForm } from '../ChatForm'
 import { ChatList } from '../ChatList'
 import { AUTHORS } from "../../utils/constants";
 
-const initialMessages = {
-    "chat-1": [
-        {
-            author: AUTHORS.ME,
-            text: "hello",
-            id: "mess-1"
-        },
-        {
-            text: "hello",
-            author: AUTHORS.ME,
-            id: "mess-2"
-        }
-    ],
-    "chat-2": [],
-    "chat-3": [],
-    "chat-4": [],
-};
-const initialChats = [
-    {
-        name: 'Alex',
-        id: "chat-1"
-    },
-    {
-        name: 'John',
-        id: "chat-2"
-    },
-    {
-        name: 'Bob',
-        id: "chat-3"
-    },
-    {
-        name: 'Julia',
-        id: "chat-4"
-    }
-];
+import { addChat, deleteChat } from "../../store/chats/actions";
+import { selectChats, selectIfChatExists } from "../../store/chats/selectors";
+import { selectMessages } from "../../store/messages/selectors";
+
+
 
 function Chats() {
     const { chatId } = useParams();
+    const history = useHistory();
+    const dispatch = useDispatch();
 
-    const [messageList, setMessageList] = useState(initialMessages);
-    const [chats, setChats] = useState(initialChats);
+    const messages = useSelector(selectMessages);
+    const chats = useSelector(selectChats);
 
-    const sendMessage = useCallback((message) => {
-        setMessageList((prevMessageList) => ({
-            ...prevMessageList,
-            [chatId]: [...prevMessageList[chatId], message],
-    }));
-}, [chatId])
+    const selectChatExists = useMemo(() => selectIfChatExists(chatId), [chatId]);
+    const chatExists = useSelector(selectChatExists);
+
+    const sendMessage = useCallback(
+        (text, author) => {
+            dispatch(addMessage(chatId, text, author));
+        },
+        [dispatch, chatId]
+    );
+
 
     useEffect(() => {
-    const curMess = messageList[chatId];
-        if (chatId && curMess !== undefined && curMess[curMess.length - 1]?.author === AUTHORS.ME) {
-            const timeout = setTimeout(() => {
-                const today = new Date();
-                const curTime = `${today.getHours()}:${today.getMinutes()}`;
-                sendMessage({
-                    author: AUTHORS.BOT,
-                    text: 'I am bot',
-                    date: curTime,
-                    id: `mess-${Date.now()}`
-                })
+        let timeout;
+        const curMess = messages[chatId];
+        if (chatId && curMess !== undefined && curMess[curMess.length - 1]?.author === AUTHORS.HUMAN) {
+            timeout = setTimeout(() => {
+                sendMessage("I am bot", AUTHORS.BOT)
             }, 1500)
             return () => {
                 clearTimeout(timeout);
             };
         }
-    }, [messageList])
+    }, [messages])
 
-    const handleAddMessage = useCallback((value) => {
-        const today = new Date();
-        const curTime = `${today.getHours()}:${today.getMinutes()}`;
-        setMessageList((prevMessageList) => ({
-            ...prevMessageList,
-            [chatId]: [
-            ...prevMessageList[chatId],
-                {
-                    author: AUTHORS.ME,
-                    text: value,
-                    date: curTime,
-                },
-        ]}));
-    },[chatId])
+    const handleAddMessage = useCallback(
+        (text) => {
+            sendMessage(text, AUTHORS.HUMAN);
+        },
+        [sendMessage]
+    );
+
+    const handleAddChat = useCallback(
+        (name) => {
+            dispatch(addChat(name));
+        },
+        [dispatch]
+    );
+
+    const handleDeleteChat = useCallback(
+        (id) => {
+            dispatch(deleteChat(id));
+
+            if (chatId !== id) {
+                return;
+            }
+
+            if (chats.length === 1) {
+                history.push(`/chats`);
+
+            } else {
+                history.push(`/chats/${chats[0].id}`);
+            }
+        },
+        [chatId, dispatch, chats, history]
+    );
+
     return (
         <Container className="App mt-2" fluid="md">
             <Row className="mb-2">
@@ -104,21 +95,26 @@ function Chats() {
             </Row>
             <Row>
                 <Col xs={4}>
-                    <ChatList chats={chats}/>
+                    <ChatList
+                        chats={chats}
+                        onAddChat={handleAddChat}
+                        onDeleteChat={handleDeleteChat}
+                    />
                 </Col>
                 <Col xs={8}>
-                    {!!chatId && !!messageList[chatId] &&
+                    {!!chatId && chatExists  && (
                     <>
-                        <ChatForm onSubmit={handleAddMessage}/>
-                        {messageList[chatId].map((messageData, i) =>
+                        <ChatForm onSubmit={handleAddMessage} />
+                        {(messages[chatId] || []).map((message) =>
                             <Message
-                                key={i}
-                                messageAuthor={messageData.author}
-                                messageText={messageData.text}
-                                renderCurDate={messageData.date}
+                                key={message.id}
+                                author={message.author}
+                                text={message.text}
+                                id={message.id}
+
                             />)}
                     </>
-                    }
+                    )}
                 </Col>
             </Row>
         </Container>

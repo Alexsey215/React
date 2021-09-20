@@ -28,7 +28,7 @@ export function ChatForm({ onSubmit }) {
                 ref={inputRef}
                 className="text-primary"
             />
-            <Button type="submit" variant="outline-primary" className="mt-2">Send message</Button>
+            <Button variant="outline-primary" className="mt-2" type="submit">Send message</Button>
         </Form>
     )
 }

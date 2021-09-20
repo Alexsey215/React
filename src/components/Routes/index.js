@@ -1,7 +1,7 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Home } from "../Home"
 import Chats from "../Chats"
-import { Profile } from "../Profile/Profile";
+import { Profile } from "../Profile";
 
 export const Routes = () => {
     return (
