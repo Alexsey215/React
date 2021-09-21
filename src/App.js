@@ -1,10 +1,14 @@
+import { Provider } from "react-redux";
+import { store } from "./store";
 import './App.scss';
 import { Routes } from "./components/Routes";
 
 function App() {
 
     return (
-        <Routes />
+        <Provider store={store}>
+            <Routes />
+        </Provider>
     );
 }
 

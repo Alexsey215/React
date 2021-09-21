@@ -1,13 +1,16 @@
 import {Link} from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux"
 import {Container, Row, Col, Form} from "react-bootstrap";
-import {store} from "../../store";
-import {toggleCheckbox} from "../../store/profile/actions";
+import { toggleCheckbox } from "../../store/profile/actions";
+import {selectCheckboxState} from "../../store/profile/selectors";
 
 export const Profile = () => {
-    const state = store.getState();
-    console.log(state)
+    //---------------Исправил-----------------
+    const checkboxState = useSelector(selectCheckboxState);
+    const dispatch = useDispatch();
+    //----------------------------------------
     const handleClick = () => {
-        store.dispatch(toggleCheckbox)
+        dispatch(toggleCheckbox)
     }
     return (
         <Container className="mt-2" fluid="md">
@@ -24,9 +27,8 @@ export const Profile = () => {
                 </Col>
             </Row>
             <h2>This is profile page</h2>
-            <Form.Check onChange={handleClick}
-            />
+            <Form.Check onChange={handleClick}/>
+            {!!checkboxState && <span>Checkbox active</span>}
         </Container>
-
     )
 }
