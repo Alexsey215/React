@@ -5,10 +5,9 @@ import { toggleCheckbox } from "../../store/profile/actions";
 import {selectCheckboxState} from "../../store/profile/selectors";
 
 export const Profile = () => {
-    //---------------Исправил-----------------
     const checkboxState = useSelector(selectCheckboxState);
     const dispatch = useDispatch();
-    //----------------------------------------
+
     const handleClick = () => {
         dispatch(toggleCheckbox)
     }
@@ -28,7 +27,7 @@ export const Profile = () => {
             </Row>
             <h2>This is profile page</h2>
             <Form.Check onChange={handleClick}/>
-            {!!checkboxState && <span>Checkbox active</span>}
+            {!!checkboxState && <span>Checkbox switched</span>}
         </Container>
     )
 }

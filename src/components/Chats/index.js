@@ -1,11 +1,11 @@
 import { Container, Row, Col  } from 'react-bootstrap';
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams,useHistory } from "react-router-dom"
 
-import { addMessage } from "../../store/messages/actions";
+import { addMessageWithReply } from "../../store/messages/actions";
 import { Message } from '../Message'
-import { ChatForm } from '../ChatForm'
+import { ChatForm } from '../ChatForm/ChatFormContainer'
 import { ChatList } from '../ChatList'
 import { AUTHORS } from "../../utils/constants";
 
@@ -28,24 +28,11 @@ function Chats() {
 
     const sendMessage = useCallback(
         (text, author) => {
-            dispatch(addMessage(chatId, text, author));
+            dispatch(addMessageWithReply(chatId, text, author));
         },
         [dispatch, chatId]
     );
 
-
-    useEffect(() => {
-        let timeout;
-        const curMess = messages[chatId];
-        if (chatId && curMess !== undefined && curMess[curMess.length - 1]?.author === AUTHORS.HUMAN) {
-            timeout = setTimeout(() => {
-                sendMessage("I am bot", AUTHORS.BOT)
-            }, 1500)
-            return () => {
-                clearTimeout(timeout);
-            };
-        }
-    }, [messages])
 
     const handleAddMessage = useCallback(
         (text) => {
