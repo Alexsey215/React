@@ -3,7 +3,6 @@ import { AUTHORS } from "../../utils/constants";
 export const ADD_MESSAGE = "MESSAGES::ADD_MESSAGE";
 export const DELETE_MESSAGE = "MESSAGES::DELETE_MESSAGE";
 
-
 export const addMessage = (chatId, text, author) => ({
     type: ADD_MESSAGE,
     payload: {

@@ -20,7 +20,7 @@ export const AddChatForm = ({onAddChat}) => {
                 value={value}
                 type="text"
                 onChange={handleChange}
-                className="text-primary mb-2 w-50"
+                className="text-primary my-1 w-50"
             />
             <Button type="submit" disabled={!value}>
                 Add chat

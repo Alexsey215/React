@@ -1,6 +1,5 @@
 import {Link} from "react-router-dom";
-import {ListGroup} from "react-bootstrap";
-import {Button} from "react-bootstrap";
+import { Button, ListGroup } from "react-bootstrap"
 
 export const ChatItem = ({chat, id, onDelete}) => {
     const handleDeleteChat = () => {
