@@ -10,9 +10,14 @@ export const Home = () => {
                         <h4>Profile page</h4>
                     </Link>
                 </Col>
-                <Col>
+                <Col xs={2}>
                     <Link to="/chats">
                         <h4>Chats</h4>
+                    </Link>
+                </Col>
+                <Col xs={2}>
+                    <Link to="/news">
+                        <h4>News</h4>
                     </Link>
                 </Col>
             </Row>

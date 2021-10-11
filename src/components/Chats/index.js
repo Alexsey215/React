@@ -70,15 +70,21 @@ function Chats() {
         <Container className="App mt-2" fluid="md">
             <Row className="mb-2">
                 <Col xs={2}>
+                    <Link  to="/">
+                        <h4>Home page</h4>
+                    </Link>
+                </Col>
+                <Col xs={2} >
                     <Link to="/profile">
                         <h4>Profile page</h4>
                     </Link>
                 </Col>
                 <Col>
-                    <Link to="/">
-                        <h4>Home page</h4>
+                    <Link to="/news">
+                        <h4>News</h4>
                     </Link>
                 </Col>
+
             </Row>
             <Row>
                 <Col xs={4}>

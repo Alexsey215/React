@@ -19,9 +19,14 @@ export const Profile = () => {
                         <h4>Home page</h4>
                     </Link>
                 </Col>
-                <Col>
+                <Col xs={2}>
                     <Link to="/chats">
                         <h4>Chats</h4>
+                    </Link>
+                </Col>
+                <Col>
+                    <Link to="/news">
+                        <h4>News</h4>
                     </Link>
                 </Col>
             </Row>
