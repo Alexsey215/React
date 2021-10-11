@@ -14,7 +14,7 @@ const getArticlesSuccess = (articles) => ({
 });
 
 const getArticlesFailure = (error) => ({
-    type: GET_ARTICLES_SUCCESS,
+    type: GET_ARTICLES_FAILURE,
     payload: error,
 });
 
@@ -29,7 +29,6 @@ export const getArticles = () => async (dispatch) => {
         }
 
         const result = await response.json();
-        console.log(result)
         dispatch(getArticlesSuccess(result));
     } catch (e) {
         console.log(e);

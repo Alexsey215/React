@@ -1,24 +1,44 @@
 import {Link} from "react-router-dom";
-import {useSelector, useDispatch} from "react-redux"
-import {Container, Row, Col, Form} from "react-bootstrap";
-import { toggleCheckbox } from "../../store/profile/actions";
-import {selectCheckboxState} from "../../store/profile/selectors";
+import {Container, Row, Col, Button, Form} from "react-bootstrap";
+import {useEffect, useState} from "react";
+import {db} from "../../services/firebase";
+import {onValue, ref, set} from "@firebase/database";
 
-export const Profile = () => {
-    const checkboxState = useSelector(selectCheckboxState);
-    const dispatch = useDispatch();
+export const Profile = ({onLogout}) => {
+    const [value, setValue] = useState("");
+    const [name, setName] = useState("");
 
     const handleClick = () => {
-        dispatch(toggleCheckbox)
+        onLogout();
     }
+
+    useEffect(() => {
+        const userDbRef = ref(db, "user");
+        onValue(userDbRef, (snapshot) => {
+            const data = snapshot.val();
+            setName(data?.username || '');
+        });
+        return () => {
+            setName("");
+        };
+    }, []);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setValue("");
+        set(ref(db, "user"), {
+            username: value,
+        });
+
+    };
+
+    const handleChange = (e) => {
+        setValue(e.target.value);
+    };
+
     return (
         <Container className="mt-2" fluid="md">
             <Row className="mb-2">
-                <Col xs={2}>
-                    <Link to="/">
-                        <h4>Home page</h4>
-                    </Link>
-                </Col>
                 <Col xs={2}>
                     <Link to="/chats">
                         <h4>Chats</h4>
@@ -31,8 +51,13 @@ export const Profile = () => {
                 </Col>
             </Row>
             <h2>This is profile page</h2>
-            <Form.Check onChange={handleClick}/>
-            {!!checkboxState && <span>Checkbox switched</span>}
+            <Form className="d-flex w-25 mb-1" onSubmit={handleSubmit}>
+                <Form.Control type="text" value={value} onChange={handleChange} />
+                <Button type="submit">Submit</Button>
+            </Form>
+            <h4>{name}</h4>
+            <Button onClick={handleClick}>Logout</Button>
         </Container>
     )
 }
+

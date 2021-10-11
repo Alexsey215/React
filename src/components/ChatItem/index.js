@@ -1,8 +1,14 @@
 import {Link} from "react-router-dom";
 import { Button, ListGroup } from "react-bootstrap"
+import {deleteChatFb} from "../../store/chats/actions";
+import {useDispatch} from "react-redux";
+import {deleteMessagesFb} from "../../store/messages/actions";
 
 export const ChatItem = ({chat, id, onDelete}) => {
+    const dispatch = useDispatch();
     const handleDeleteChat = () => {
+        dispatch(deleteChatFb(id));
+        dispatch(deleteMessagesFb(id))
         onDelete(id);
     }
     return (

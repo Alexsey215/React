@@ -23,11 +23,6 @@ export const News = () => {
         <Container className="container-lg mt-2" fluid="md">
             <Row className="mb-2">
                 <Col xs={2}>
-                    <Link to="/">
-                        <h4>Home page</h4>
-                    </Link>
-                </Col>
-                <Col xs={2}>
                     <Link to="/profile">
                         <h4>Profile page</h4>
                     </Link>
