@@ -1,4 +1,4 @@
-import { ADD_MESSAGE, DELETE_MESSAGE } from "./actions";
+import { ADD_MESSAGE, DELETE_MESSAGE, SET_MESSAGES } from "./actions";
 
 const initialState = {
     messages: {},
@@ -12,7 +12,7 @@ export const messagesReducer = (state = initialState, { type, payload }) => {
                 messages: {
                     ...state.messages,
                     [payload.chatId]: [
-                        ...(state.messages[payload.chatId] || []),
+                        ...(Object.values(state.messages[payload.chatId]) || {} || []),
                         {
                             id: `message-${Date.now()}`,
                             text: payload.text,
@@ -35,6 +35,14 @@ export const messagesReducer = (state = initialState, { type, payload }) => {
                 },
             };
         }
+
+        case SET_MESSAGES: {
+            return {
+                ...state,
+                messages: payload,
+            }
+        }
+
         default:
             return state;
     }

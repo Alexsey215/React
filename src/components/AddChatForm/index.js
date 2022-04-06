@@ -1,16 +1,19 @@
 import { useState } from "react"
 import {Form, Button} from "react-bootstrap";
+import {useDispatch} from "react-redux";
+import {addChatFb} from "../../store/chats/actions";
 
 export const AddChatForm = ({onAddChat}) => {
     const [value, setValue] = useState('');
+    const dispatch = useDispatch();
+
     const handleChange = (e) => {
         setValue(e.target.value);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        onAddChat(value);
+        dispatch(addChatFb(value))
         setValue('');
     }
     return (
